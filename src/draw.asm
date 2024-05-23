@@ -6,7 +6,7 @@
 ; input bl: colour
 ; input cx: cell x
 ; input dx: cell y
-draw_cell:
+drawCell:
 	cmp cx, VIDEO_W / CELL_SIZE
 	jnb .enda
 	cmp dx, VIDEO_H / CELL_SIZE
@@ -57,7 +57,7 @@ screen_colour_loop:
 	push cx
 	push dx
 	push bx
-	call draw_cell
+	call drawCell
 
 	pop bx
 	pop dx

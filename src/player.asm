@@ -3,15 +3,8 @@
 [bits 16]
 
 player:
-	mov bl, [pallete.3]
-	mov cx, [playerpos.x]
-	mov dx, [playerpos.y]
-	call draw_cell
-
 .hold:
-	mov ah, 1
-	int 0x16
-	jz .hold
+	call inputWait
 
 	mov cx, [playerpos.x]
 	mov dx, [playerpos.y]
@@ -24,6 +17,8 @@ player:
 	je .up
 	cmp al, 's'
 	je .down
+	cmp al, 10 ; ctrl+enter
+	je .test
 
 	jmp .hold
 
@@ -31,29 +26,42 @@ player:
 	cmp cx, VIDEO_W / CELL_SIZE - 1
 	je .skip
 	inc byte [playerpos.x]
-	jmp .move
+	jmp .moved
 .left:
 	cmp cx, 0
 	je .skip
 	dec byte [playerpos.x]
-	jmp .move
+	jmp .moved
 .up:
 	cmp dx, 0
 	je .skip
 	dec byte [playerpos.y]
-	jmp .move
+	jmp .moved
 .down:
 	cmp dx, VIDEO_H / CELL_SIZE - 1
 	je .skip
 	inc byte [playerpos.y]
-	jmp .move
+	jmp .moved
 
+.test:
+	cmp dx, VIDEO_H / CELL_SIZE - 1
+	je .skip
+	inc byte [playerpos.y]
+	jmp .moved
 
-.move:
+.moved:
 	mov bl, [pallete.0]
-	call draw_cell
+	call drawCell       ; redraw background
 
 .skip:
-	xor ah, ah
-	int 0x16   ; clear keyboard buffer
-	jmp player
+	call drawPlayer
+	ret
+
+
+
+drawPlayer:
+	mov bl, [pallete.3]
+	mov cx, [playerpos.x]
+	mov dx, [playerpos.y]
+	call drawCell
+	ret

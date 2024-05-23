@@ -37,7 +37,18 @@ start:
 	push 0xA000
 	pop es
 
-	jmp player
+	call drawPlayer
+
+
+game_loop:
+	call inputWait
+	call player
+
+	xor ah, ah
+	int 0x16   ; clear keyboard buffer
+	jmp game_loop
+
+
 
 	cli
 	hlt
@@ -45,6 +56,15 @@ start:
 
 %include "src/draw.asm"
 %include "src/player.asm" 
+
+; returns ah: scancode
+; returns al: ascii char
+; input buffer NOT cleared (use ah=0)
+inputWait:
+	mov ah, 1	
+	int 0x16
+	jz inputWait
+	ret
 
 
 times 510-($-$$) db 0
