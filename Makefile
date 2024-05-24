@@ -10,8 +10,11 @@ VM= qemu-system-x86_64 -drive format=raw,file=$(BIN_DIR)/$(NAME)
 
 all: $(BIN_DIR)/$(NAME)
 
-$(BIN_DIR)/$(NAME): $(SRC) | $(BIN_DIR)
-	$(ASM) $(ASM_FLAGS) -o$(BIN_DIR)/$(NAME) $(SRC_DIR)/game.asm
+$(BIN_DIR)/$(NAME): $(SRC) $(BIN_DIR)/map.bin | $(BIN_DIR)
+	$(ASM) $(ASM_FLAGS) -o$@ $(SRC_DIR)/game.asm
+
+$(BIN_DIR)/map.bin: $(SRC_DIR)/map.asm
+	$(ASM) $(ASM_FLAGS) -o$@ $<
 
 $(BIN_DIR):
 	mkdir $@

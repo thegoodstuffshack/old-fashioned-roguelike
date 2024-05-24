@@ -6,7 +6,7 @@ jmp start
 VIDEO_ADDR equ 0xA000
 VIDEO_W    equ 320
 VIDEO_H    equ 200
-CELL_SIZE  equ 10 ; (1, 2, 4, 5, 8, 10, 20, 40)
+CELL_SIZE  equ 5 ; (1, 2, 4, 5, 8, 10, 20, 40)
 
 
 BOOT_DRIVE db 0
@@ -69,3 +69,6 @@ inputWait:
 
 times 510-($-$$) db 0
 dw 0xAA55
+
+map: incbin "bin/map.bin"
+mapsize equ 320 ; 320 / 8*5 * 200 / 8*5
