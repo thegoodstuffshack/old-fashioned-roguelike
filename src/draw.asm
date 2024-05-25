@@ -8,9 +8,9 @@
 ; input dx: cell y
 drawCell:
 	cmp cx, VIDEO_W / CELL_SIZE
-	jnb .enda
+	jnb .end
 	cmp dx, VIDEO_H / CELL_SIZE
-	jnb .enda
+	jnb .end
 	
 	mov ax, VIDEO_W * CELL_SIZE
 	mul dx
@@ -39,9 +39,23 @@ drawCell:
 	inc dh
 	cmp dh, CELL_SIZE
 	jne .row
-	jmp .end
 
-.enda:
+.end:
+	ret
+
+
+; input ax: pointer to map
+; input bx: map size (bytes)
+drawMap:
+	mov si, ax
+
+.read_and_draw:
+	cmp si, 10
+	je .end
+	push 0
+	pop es
+	mov al, byte [es:si]
+
 
 
 .end:

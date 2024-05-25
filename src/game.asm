@@ -6,14 +6,14 @@ jmp start
 VIDEO_ADDR equ 0xA000
 VIDEO_W    equ 320
 VIDEO_H    equ 200
-CELL_SIZE  equ 5 ; (1, 2, 4, 5, 8, 10, 20, 40)
+CELL_SIZE  equ 10 ; (1, 2, 4, 5, 8, 10, 20, 40)
 
 
 BOOT_DRIVE db 0
 
 playerpos:
 .x: dw 0
-.y: dw 0
+.y: dw 1
 
 pallete:
 .0: db 0  ; black
@@ -38,6 +38,10 @@ start:
 	pop es
 
 	call drawPlayer
+	
+	mov ax, map
+	mov bx, mapsize
+	call drawMap		; need to fix -- make it so each possible value with 2bp then just cmp and jmp
 
 
 game_loop:
@@ -65,10 +69,10 @@ inputWait:
 	int 0x16
 	jz inputWait
 	ret
+	int 0x10
 
+map: incbin "bin/map.bin"
+mapsize equ 80 ; 320 / 8*10 * 200 / 10
 
 times 510-($-$$) db 0
 dw 0xAA55
-
-map: incbin "bin/map.bin"
-mapsize equ 320 ; 320 / 8*5 * 200 / 8*5
