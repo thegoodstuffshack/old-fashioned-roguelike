@@ -44,22 +44,58 @@ drawCell:
 	ret
 
 
+db 0,0,0,0,0,0,0,0,0,0,0
+
 ; input ax: pointer to map
 ; input bx: map size (bytes)
 drawMap:
 	mov si, ax
+	mov dword [drawMap.x], 0
 
+	mov cx, 8
 .read_and_draw:
-	cmp si, 10
+	mov al, byte [si]
+
+.word_loop:
+	sub cl, 1
+	push ax
+	shr al, cl
+	and al, 1
+	jnz .wall
+
+.wall_end:
+	pop ax
+	inc word [drawMap.x]
+	cmp cl, 0
+	jne .word_loop
+	inc si
+	cmp word [drawMap.x], VIDEO_W
+	je .nRow
+	jmp .read_and_draw
+
+.nRow:
+	mov word [drawMap.x], 0
+	inc word [drawMap.y]
+	cmp word [drawMap.y], VIDEO_H
 	je .end
-	push 0
-	pop es
-	mov al, byte [es:si]
+	jmp .read_and_draw
 
-
+.wall:
+	push si
+	push cx
+	mov bl, [pallete.2]
+	mov cx, word [drawMap.x]
+	mov dx, word [drawMap.y]
+	call drawCell
+	pop cx
+	pop si
+	jmp .wall_end
 
 .end:
 	ret
+
+.x: dw 0
+.y: dw 0
 
 
 screen_colour_loop:
