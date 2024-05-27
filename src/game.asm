@@ -6,19 +6,19 @@ jmp start
 VIDEO_ADDR equ 0xA000
 VIDEO_W    equ 320
 VIDEO_H    equ 200
-CELL_SIZE  equ 10 ; (1, 2, 4, 5, 8, 10, 20, 40)
+CELL_SIZE  equ 5 ; (1, 2, 4, 5, 8, 10, 20, 40)
 
 
 BOOT_DRIVE db 0
 
 playerpos:
-.x: dw 0
+.x: dw 1
 .y: dw 1
 
 pallete:
 .0: db 0  ; black
 .1: db 10 ; lgreen
-.2: db 12 ; red
+.2: db 13 ; red
 .3: db 15 ; white
 
 
@@ -32,16 +32,17 @@ start:
 
 	mov [BOOT_DRIVE], dl
 
+	call load_sectors
+
 	mov ax, 0x0013 ; video addr 0xA0000, 320x200, 16:10, 8bpp
 	int 0x10
 	push 0xA000
 	pop es
 
-	call drawPlayer
-	
 	mov ax, map
 	mov bx, mapsize
-	call drawMap		; need to fix -- make it so each possible value with 2bp then just cmp and jmp
+	call drawMap
+	call drawPlayer
 
 
 game_loop:
@@ -60,6 +61,7 @@ game_loop:
 
 %include "src/draw.asm"
 %include "src/player.asm" 
+%include "src/disk.asm"
 
 ; returns ah: scancode
 ; returns al: ascii char
@@ -71,8 +73,10 @@ inputWait:
 	ret
 	int 0x10
 
-map: incbin "bin/map.bin"
-mapsize equ 80 ; 320 / 8*10 * 200 / 10
 
 times 510-($-$$) db 0
 dw 0xAA55
+
+; 0x7e00
+map: incbin "bin/map.bin"
+mapsize equ 80 ; 320 / 8*10 * 200 / 10

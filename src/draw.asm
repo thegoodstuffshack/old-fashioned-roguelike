@@ -52,8 +52,8 @@ drawMap:
 	mov si, ax
 	mov dword [drawMap.x], 0
 
-	mov cx, 8
 .read_and_draw:
+	mov cx, 8
 	mov al, byte [si]
 
 .word_loop:
@@ -69,14 +69,14 @@ drawMap:
 	cmp cl, 0
 	jne .word_loop
 	inc si
-	cmp word [drawMap.x], VIDEO_W
+	cmp word [drawMap.x], VIDEO_W / CELL_SIZE
 	je .nRow
 	jmp .read_and_draw
 
 .nRow:
 	mov word [drawMap.x], 0
 	inc word [drawMap.y]
-	cmp word [drawMap.y], VIDEO_H
+	cmp word [drawMap.y], VIDEO_H / CELL_SIZE
 	je .end
 	jmp .read_and_draw
 
