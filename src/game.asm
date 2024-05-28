@@ -59,8 +59,9 @@ game_loop:
 
 
 %include "src/draw.asm"
-%include "src/player.asm" 
+%include "src/player.asm"
 %include "src/collision.asm"
+%include "src/enemy.asm"
 %include "src/disk.asm"
 
 ; returns ah: scancode

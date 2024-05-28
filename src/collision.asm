@@ -1,5 +1,7 @@
 ;
 
+[bits 16]
+
 ; input ax: pointer to map
 ; input cx: cell x
 ; input dx: cell y
