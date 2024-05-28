@@ -50,13 +50,22 @@ player:
 	jmp .moved
 
 .moved:
+	push cx
+	push dx
+	mov ax, map
+	mov bl, 1
+	mov cx, word [playerpos.x]
+	mov dx, word [playerpos.y]
+	call checkCollision ; input playerpos.x, playerpos.y, revert to cx, dx
+	pop dx
+	pop cx
+
 	mov bl, [pallete.0]
 	call drawCell       ; redraw background
 
 .skip:
 	call drawPlayer
 	ret
-
 
 
 drawPlayer:

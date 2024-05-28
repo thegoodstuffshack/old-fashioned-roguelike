@@ -40,7 +40,6 @@ start:
 	pop es
 
 	mov ax, map
-	mov bx, mapsize
 	call drawMap
 	call drawPlayer
 
@@ -61,6 +60,7 @@ game_loop:
 
 %include "src/draw.asm"
 %include "src/player.asm" 
+%include "src/collision.asm"
 %include "src/disk.asm"
 
 ; returns ah: scancode
@@ -79,4 +79,4 @@ dw 0xAA55
 
 ; 0x7e00
 map: incbin "bin/map.bin"
-mapsize equ 80 ; 320 / 8*10 * 200 / 10
+times 512 db 0

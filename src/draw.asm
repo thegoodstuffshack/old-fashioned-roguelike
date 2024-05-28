@@ -1,5 +1,4 @@
-; draw_cell.asm
-; colours a cell on screen according to CELL_SIZE
+; draw.asm
 
 [bits 16]
 
@@ -11,14 +10,8 @@ drawCell:
 	jnb .end
 	cmp dx, VIDEO_H / CELL_SIZE
 	jnb .end
-	
-	mov ax, VIDEO_W * CELL_SIZE
-	mul dx
-	push ax
-	mov ax, CELL_SIZE
-	mul cx
-	pop si
-	add ax, si ; y*w + x*csize
+
+	call cellToOffset
 
 	xor bh, bh
 
@@ -43,11 +36,21 @@ drawCell:
 .end:
 	ret
 
+; input cx: cell x
+; input dx: cell y
+; returns ax: offset 
+cellToOffset:
+	mov ax, VIDEO_W * CELL_SIZE
+	mul dx
+	push ax
+	mov ax, CELL_SIZE
+	mul cx
+	pop si
+	add ax, si ; y*w + x*csize
+	ret
 
-db 0,0,0,0,0,0,0,0,0,0,0
 
 ; input ax: pointer to map
-; input bx: map size (bytes)
 drawMap:
 	mov si, ax
 	mov dword [drawMap.x], 0
