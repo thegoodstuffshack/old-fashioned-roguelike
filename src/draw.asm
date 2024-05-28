@@ -11,7 +11,12 @@ drawCell:
 	cmp dx, VIDEO_H / CELL_SIZE
 	jnb .end
 
-	call cellToOffset
+	mov ax, VIDEO_W * CELL_SIZE
+	mul dx
+	mov si, ax
+	mov ax, CELL_SIZE
+	mul cx
+	add ax, si ; (y*w + x) * cSize
 
 	xor bh, bh
 
@@ -34,19 +39,6 @@ drawCell:
 	jne .row
 
 .end:
-	ret
-
-; input cx: cell x
-; input dx: cell y
-; returns ax: offset 
-cellToOffset:
-	mov ax, VIDEO_W * CELL_SIZE
-	mul dx
-	push ax
-	mov ax, CELL_SIZE
-	mul cx
-	pop si
-	add ax, si ; y*w + x*csize
 	ret
 
 

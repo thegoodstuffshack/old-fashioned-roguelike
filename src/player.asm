@@ -53,15 +53,20 @@ player:
 	push cx
 	push dx
 	mov ax, map
-	mov bl, 1
 	mov cx, word [playerpos.x]
 	mov dx, word [playerpos.y]
 	call checkCollision ; input playerpos.x, playerpos.y, revert to cx, dx
 	pop dx
 	pop cx
+	jnz .reverse
 
 	mov bl, [pallete.0]
 	call drawCell       ; redraw background
+	jmp .skip
+
+.reverse:
+	mov word [playerpos.x], cx
+	mov word [playerpos.y], dx
 
 .skip:
 	call drawPlayer
