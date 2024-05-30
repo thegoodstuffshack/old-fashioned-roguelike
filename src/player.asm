@@ -3,9 +3,6 @@
 [bits 16]
 
 player:
-.hold:
-	call inputWait
-
 	mov cx, [playerpos.x]
 	mov dx, [playerpos.y]
 
@@ -20,7 +17,7 @@ player:
 	cmp al, 10 ; ctrl+enter
 	je .test
 
-	jmp .hold
+	jmp .skip
 
 .right:
 	cmp cx, VIDEO_W / CELL_SIZE - 1

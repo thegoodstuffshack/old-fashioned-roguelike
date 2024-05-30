@@ -53,7 +53,6 @@ game_loop:
 	jmp game_loop
 
 
-
 	cli
 	hlt
 
