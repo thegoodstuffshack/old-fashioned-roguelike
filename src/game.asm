@@ -11,15 +11,11 @@ CELL_SIZE  equ 5 ; (1, 2, 4, 5, 8, 10, 20, 40)
 
 BOOT_DRIVE db 0
 
-playerpos:
-.x: dw 1
-.y: dw 1
-
 pallete:
-.0: db 0  ; black
-.1: db 10 ; lgreen
-.2: db 13 ; red
-.3: db 15 ; white
+.0: db 0  ; background - black
+.1: db 10 ;            - lgreen
+.2: db 13 ; enemy      - red
+.3: db 15 ; player     - white
 
 
 start:
@@ -46,6 +42,7 @@ start:
 
 game_loop:
 	call inputWait
+	call enemyHandler
 	call player
 
 	xor ah, ah
@@ -60,7 +57,6 @@ game_loop:
 %include "src/draw.asm"
 %include "src/player.asm"
 %include "src/collision.asm"
-%include "src/enemy.asm"
 %include "src/disk.asm"
 
 ; returns ah: scancode
@@ -77,6 +73,8 @@ inputWait:
 times 510-($-$$) db 0
 dw 0xAA55
 
-; 0x7e00
+%include "src/enemy.asm"
+
 map: incbin "bin/map.bin"
-times 512 db 0
+
+times 2*512-($-$$) db 0

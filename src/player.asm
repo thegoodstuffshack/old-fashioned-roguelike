@@ -2,7 +2,15 @@
 
 [bits 16]
 
+playerpos:
+.x: dw 1
+.y: dw 1
+playerStatus: db 1
+
 player:
+	cmp byte [playerStatus], 0
+	je playerDead
+
 	mov cx, [playerpos.x]
 	mov dx, [playerpos.y]
 
@@ -76,3 +84,8 @@ drawPlayer:
 	mov dx, [playerpos.y]
 	call drawCell
 	ret
+
+
+; change/remove colour, revive?, game over, halt/reset game
+playerDead:
+	jmp $
