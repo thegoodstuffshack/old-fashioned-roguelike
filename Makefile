@@ -2,7 +2,7 @@ ASM= nasm
 ASM_FLAGS= -fbin
 SRC_DIR= ./src
 BIN_DIR= ./bin
-SRC= $(wildcard $(SRC_DIR)/*.asm)
+SRC= $(wildcard $(SRC_DIR)/*.asm) $(wildcard $(SRC_DIR)/enemies/*.asm)
 NAME= roguelike
 VM= qemu-system-x86_64 -drive format=raw,file=$(BIN_DIR)/$(NAME)
 
