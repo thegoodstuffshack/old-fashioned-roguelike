@@ -3,16 +3,16 @@
 [bits 16]
 
 playerpos:
-.x: dw 1
-.y: dw 1
+.x: db 10
+.y: db 10
 playerStatus: db 1
 
 player:
 	cmp byte [playerStatus], 0
 	je playerDead
 
-	mov cx, [playerpos.x]
-	mov dx, [playerpos.y]
+	mov cl, [playerpos.x]
+	mov dl, [playerpos.y]
 
 	cmp al, 'd'
 	je .right
@@ -28,28 +28,28 @@ player:
 	jmp .skip
 
 .right:
-	cmp cx, VIDEO_W / CELL_SIZE - 1
+	cmp cl, VIDEO_W / CELL_SIZE - 1
 	je .skip
 	inc byte [playerpos.x]
 	jmp .moved
 .left:
-	cmp cx, 0
+	cmp cl, 0
 	je .skip
 	dec byte [playerpos.x]
 	jmp .moved
 .up:
-	cmp dx, 0
+	cmp dl, 0
 	je .skip
 	dec byte [playerpos.y]
 	jmp .moved
 .down:
-	cmp dx, VIDEO_H / CELL_SIZE - 1
+	cmp dl, VIDEO_H / CELL_SIZE - 1
 	je .skip
 	inc byte [playerpos.y]
 	jmp .moved
 
 .test:
-	cmp dx, VIDEO_H / CELL_SIZE - 1
+	cmp dl, VIDEO_H / CELL_SIZE - 1
 	je .skip
 	inc byte [playerpos.y]
 	jmp .moved
@@ -58,8 +58,8 @@ player:
 	push cx
 	push dx
 	mov ax, map
-	mov cx, word [playerpos.x]
-	mov dx, word [playerpos.y]
+	mov cl, byte [playerpos.x]
+	mov dl, byte [playerpos.y]
 	call checkCollision ; input playerpos.x, playerpos.y, revert to cx, dx
 	pop dx
 	pop cx
@@ -70,8 +70,8 @@ player:
 	jmp .skip
 
 .reverse:
-	mov word [playerpos.x], cx
-	mov word [playerpos.y], dx
+	mov byte [playerpos.x], cl
+	mov byte [playerpos.y], dl
 
 .skip:
 	call drawPlayer
@@ -80,8 +80,8 @@ player:
 
 drawPlayer:
 	mov bl, [pallete.3]
-	mov cx, [playerpos.x]
-	mov dx, [playerpos.y]
+	mov cl, [playerpos.x]
+	mov dl, [playerpos.y]
 	call drawCell
 	ret
 

@@ -3,39 +3,40 @@
 [bits 16]
 
 ; input bl: colour
-; input cx: cell x
-; input dx: cell y
+; input cl: cell x
+; input dl: cell y
 drawCell:
-	cmp cx, VIDEO_W / CELL_SIZE
+	cmp cl, VIDEO_W / CELL_SIZE
 	jnb .end
-	cmp dx, VIDEO_H / CELL_SIZE
+	cmp dl, VIDEO_H / CELL_SIZE
 	jnb .end
 
+	xor dh, dh
 	mov ax, VIDEO_W * CELL_SIZE
 	mul dx
 	mov si, ax
 	mov ax, CELL_SIZE
-	mul cx
+	mul cl
 	add ax, si ; (y*w + x) * cSize
 
-	xor bh, bh
-
 	mov si, ax
+	xor ax, ax
+
 	push VIDEO_ADDR
 	pop es
 
 .row:
-	cmp bh, CELL_SIZE
+	cmp ah, CELL_SIZE
 	je .col
 	mov byte [es:si], bl
-	inc bh
+	inc ah
 	inc si
 	jmp .row
 .col:
 	add si, VIDEO_W - CELL_SIZE
-	xor bh, bh
-	inc dh
-	cmp dh, CELL_SIZE
+	xor ah, ah
+	inc al
+	cmp al, CELL_SIZE
 	jne .row
 
 .end:
@@ -45,7 +46,7 @@ drawCell:
 ; input ax: pointer to map
 drawMap:
 	mov si, ax
-	mov dword [drawMap.x], 0
+	mov word [drawMap.x], 0
 
 .read_and_draw:
 	mov cx, 8
@@ -60,18 +61,18 @@ drawMap:
 
 .wall_end:
 	pop ax
-	inc word [drawMap.x]
+	inc byte [drawMap.x]
 	cmp cl, 0
 	jne .word_loop
 	inc si
-	cmp word [drawMap.x], VIDEO_W / CELL_SIZE
+	cmp byte [drawMap.x], VIDEO_W / CELL_SIZE
 	je .nRow
 	jmp .read_and_draw
 
 .nRow:
-	mov word [drawMap.x], 0
-	inc word [drawMap.y]
-	cmp word [drawMap.y], VIDEO_H / CELL_SIZE
+	mov byte [drawMap.x], 0
+	inc byte [drawMap.y]
+	cmp byte [drawMap.y], VIDEO_H / CELL_SIZE
 	je .end
 	jmp .read_and_draw
 
@@ -79,8 +80,8 @@ drawMap:
 	push si
 	push cx
 	mov bl, [pallete.2]
-	mov cx, word [drawMap.x]
-	mov dx, word [drawMap.y]
+	mov cl, byte [drawMap.x]
+	mov dl, byte [drawMap.y]
 	call drawCell
 	pop cx
 	pop si
@@ -89,39 +90,39 @@ drawMap:
 .end:
 	ret
 
-.x: dw 0
-.y: dw 0
+.x: db 0
+.y: db 0
 
 
-screen_colour_loop:
-	xor cx, cx
-	xor dx, dx
-	xor bl, bl
+; screen_colour_loop:				; not used
+; 	xor cx, cx
+; 	xor dx, dx
+; 	xor bl, bl
 
-.loop:
-	push cx
-	push dx
-	push bx
-	call drawCell
+; .loop:
+; 	push cx
+; 	push dx
+; 	push bx
+; 	call drawCell
 
-	pop bx
-	pop dx
-	pop cx
-	inc bl
-	inc cx
-	cmp cx, VIDEO_W / CELL_SIZE
-	jne .loop
-	inc dx
-	xor cx, cx
-	cmp dx, VIDEO_H / CELL_SIZE
-	jne .loop
-	xor dx, dx
-	mov ah, 0x86
-	mov cx, 0x0010
-	mov dx, 0x0000
-	int 0x15
+; 	pop bx
+; 	pop dx
+; 	pop cx
+; 	inc bl
+; 	inc cx
+; 	cmp cx, VIDEO_W / CELL_SIZE
+; 	jne .loop
+; 	inc dx
+; 	xor cx, cx
+; 	cmp dx, VIDEO_H / CELL_SIZE
+; 	jne .loop
+; 	xor dx, dx
+; 	mov ah, 0x86
+; 	mov cx, 0x0010
+; 	mov dx, 0x0000
+; 	int 0x15
 
-	xor cx, cx
-	xor dx, dx
+; 	xor cx, cx
+; 	xor dx, dx
 
-	jmp .loop
+; 	jmp .loop

@@ -1,3 +1,7 @@
+; game.asm
+
+; NOTE: can change player pos to byte, will need to change cx,dx to cl,dl
+
 [bits 16]
 [org 0x7c00]
 
@@ -19,11 +23,11 @@ pallete:
 
 
 start:
-	xor ax, ax
-	mov ds, ax
-	mov fs, ax
-	mov gs, ax
-	mov ss, ax
+	xor ebx, ebx
+	mov ds, bx
+	mov fs, bx
+	mov gs, bx
+	mov ss, bx
 	mov sp, 0x7c00
 
 	mov [BOOT_DRIVE], dl
@@ -42,16 +46,14 @@ start:
 
 game_loop:
 	call inputWait
+	push ax
 	call enemyHandler
+	pop ax
 	call player
 
 	xor ah, ah
 	int 0x16   ; clear keyboard buffer
 	jmp game_loop
-
-
-	cli
-	hlt
 
 
 %include "src/draw.asm"
@@ -67,8 +69,10 @@ inputWait:
 	int 0x16
 	jz inputWait
 	ret
-	int 0x10
 
+
+	cli
+	hlt
 
 times 510-($-$$) db 0
 dw 0xAA55
