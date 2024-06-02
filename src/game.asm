@@ -17,9 +17,10 @@ BOOT_DRIVE db 0
 
 pallete:
 .0: db 0  ; background - black
-.1: db 10 ;            - lgreen
-.2: db 13 ; enemy      - red
+.1: db 10 ; dead       - lgreen
+.2: db 13 ; wall       - purple
 .3: db 15 ; player     - white
+.4: db 12 ; enemy      - red
 
 
 start:
@@ -46,10 +47,9 @@ start:
 
 game_loop:
 	call inputWait
-	push ax
-	call enemyHandler
-	pop ax
 	call player
+
+	call enemyHandler
 
 	xor ah, ah
 	int 0x16   ; clear keyboard buffer

@@ -8,9 +8,6 @@ playerpos:
 playerStatus: db 1
 
 player:
-	cmp byte [playerStatus], 0
-	je playerDead
-
 	mov cl, [playerpos.x]
 	mov dl, [playerpos.y]
 
@@ -88,4 +85,8 @@ drawPlayer:
 
 ; change/remove colour, revive?, game over, halt/reset game
 playerDead:
+	mov cl, byte [playerpos.x]
+	mov dl, byte [playerpos.y]
+	mov bl, byte [pallete.1]
+	call drawCell
 	jmp $

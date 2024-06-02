@@ -11,6 +11,7 @@ drawCell:
 	cmp dl, VIDEO_H / CELL_SIZE
 	jnb .end
 
+	push dx
 	xor dh, dh
 	mov ax, VIDEO_W * CELL_SIZE
 	mul dx
@@ -18,6 +19,7 @@ drawCell:
 	mov ax, CELL_SIZE
 	mul cl
 	add ax, si ; (y*w + x) * cSize
+	pop dx
 
 	mov si, ax
 	xor ax, ax
