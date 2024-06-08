@@ -16,16 +16,12 @@ drawCell:
 	mov ax, VIDEO_W * CELL_SIZE
 	mul dx
 	mov si, ax
-	mov ax, CELL_SIZE
+	mov al, CELL_SIZE
 	mul cl
-	add ax, si ; (y*w + x) * cSize
+	add si, ax ; (y*w + x) * cSize
 	pop dx
 
-	mov si, ax
 	xor ax, ax
-
-	push VIDEO_ADDR
-	pop es
 
 .row:
 	cmp ah, CELL_SIZE
@@ -96,11 +92,55 @@ drawMap:
 .y: db 0
 
 
-turtle:
+turtle: db \
+0, 2, 2, 2, 2, 2, 2, 0,\
+2, 2, 2, 3, 2, 2, 2, 2,\
+2, 2, 4, 3, 3, 4, 2, 2,\
+2, 2, 3, 3, 4, 4, 2, 2,\
+2, 3, 4, 3, 3, 3, 1, 1,\
+2, 3, 4, 3, 4, 1, 1, 1,\
+2, 2, 5, 5, 2, 5, 2, 2,\
+0, 2, 5, 2, 2, 5, 2, 0
 
 
+; input ax: pointer to image
+; input cl: cell x
+; input dl: cell y
 loadImageToCell:
+	mov di, ax
+	
+	push dx
+	xor dh, dh
+	mov ax, VIDEO_W * CELL_SIZE
+	mul dx
+	mov si, ax
+	mov al, CELL_SIZE
+	mul cl
+	add si, ax ; (y*w + x) * cSize
+	pop dx
 
+	xor ax, ax
+.row:
+	cmp ah, CELL_SIZE
+	je .col
+
+	; find colour -> bl
+	mov bl, byte [di]
+
+	mov byte [es:si], bl
+	inc ah
+	inc si
+	inc di
+	jmp .row
+.col:
+	add si, VIDEO_W - CELL_SIZE
+	xor ah, ah
+	inc al
+	cmp al, CELL_SIZE
+	jne .row
+
+.end:
+	ret
 
 
 

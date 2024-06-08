@@ -59,8 +59,6 @@ game_loop:
 
 
 %include "src/draw.asm"
-%include "src/player.asm"
-%include "src/collision.asm"
 %include "src/disk.asm"
 
 ; returns ah: scancode
@@ -76,6 +74,8 @@ inputWait:
 times 510-($-$$) db 0
 dw 0xAA55
 
+%include "src/player.asm"
+%include "src/collision.asm"
 %include "src/enemy.asm"
 
 map: incbin "bin/map.bin"

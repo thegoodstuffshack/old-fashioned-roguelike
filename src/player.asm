@@ -49,6 +49,12 @@ player:
 	cmp dl, VIDEO_H / CELL_SIZE - 1
 	je .skip
 	inc byte [playerpos.y]
+	pusha
+	mov ax, turtle
+	mov cl, 1
+	mov dl, 1
+	call loadImageToCell
+	popa
 	jmp .moved
 
 .moved:
