@@ -10,7 +10,7 @@ stalker:
 	mov bx, word [bp+6]
 	lea bx, [bx+enemy_memory]
 	inc byte [bx]
-	and byte [bx], 3
+	and byte [bx], 3     ; move every 4 turns
 	jne .end
 
 	; x-dir = player-enemy
@@ -45,5 +45,3 @@ stalker:
 .end:
 	pop bp
 	ret
-
-

@@ -96,6 +96,14 @@ drawMap:
 .y: db 0
 
 
+turtle:
+
+
+loadImageToCell:
+
+
+
+
 ; screen_colour_loop:				; not used
 ; 	xor cx, cx
 ; 	xor dx, dx

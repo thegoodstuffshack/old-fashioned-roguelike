@@ -44,7 +44,6 @@ enemyHandler:
 	mov ch, dl
 	mov word [si], cx
 
-
 	pop bx
 	inc bx
 	jmp .enemy_logic_loop
@@ -87,8 +86,7 @@ enemy_count equ enemy_positions - enemy_list
 enemy_memory: times enemy_count db 0
 
 enemy_list: db           0,      0,      0
-enemy_positions: dw 0x0101, 0x1010, 0x2222 ; 0xYYXX
-
+enemy_positions: dw coord(1,1), coord(10,10), coord(15, 2)
 
 
 ; enemy_rng_pointer: dw 0xFFFF

@@ -1,7 +1,5 @@
 ; game.asm
 
-; NOTE: can change player pos to byte, will need to change cx,dx to cl,dl
-
 [bits 16]
 [org 0x7c00]
 
@@ -10,7 +8,9 @@ jmp start
 VIDEO_ADDR equ 0xA000
 VIDEO_W    equ 320
 VIDEO_H    equ 200
-CELL_SIZE  equ 5 ; (1, 2, 4, 5, 8, 10, 20, 40)
+CELL_SIZE  equ 8 ; (1, 2, 4, 5, 8, 10, 20, 40)
+
+%define coord(x,y) y*256+x     ; 0xYYXX
 
 
 BOOT_DRIVE db 0
@@ -31,6 +31,7 @@ start:
 	mov ss, bx
 	mov sp, 0x7c00
 
+
 	mov [BOOT_DRIVE], dl
 
 	call load_sectors
@@ -39,6 +40,7 @@ start:
 	int 0x10
 	push 0xA000
 	pop es
+	; call screen_colour_loop
 
 	mov ax, map
 	call drawMap
@@ -70,9 +72,6 @@ inputWait:
 	jz inputWait
 	ret
 
-
-	cli
-	hlt
 
 times 510-($-$$) db 0
 dw 0xAA55
