@@ -78,6 +78,10 @@ dw 0xAA55
 %include "src/collision.asm"
 %include "src/enemy.asm"
 
+times 2*512-($-$$) db 0
 map: incbin "bin/map.bin"
 
-times 2*512-($-$$) db 0
+
+
+sector_amount equ 3
+times sector_amount*512-($-$$) db 0

@@ -4,7 +4,7 @@
 
 load_sectors:
 	mov ah, 0x02	; read data to memory
-	mov al, 1		; no. of sectors
+	mov al, sector_amount-1	; no. of sectors
 	mov ch, 0	    ; cylinder_count 
 	mov cl, 2	    ; sector in head
 	mov dh, 0	    ; head_count

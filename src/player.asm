@@ -51,8 +51,8 @@ player:
 	inc byte [playerpos.y]
 	pusha
 	mov ax, turtle
-	mov cl, 1
-	mov dl, 1
+	mov cl, 2
+	mov dl, 2
 	call loadImageToCell
 	popa
 	jmp .moved
@@ -66,13 +66,13 @@ player:
 	call checkCollision ; input playerpos.x, playerpos.y, revert to cx, dx
 	pop dx
 	pop cx
-	jnz .reverse
+	jnz .redraw
 
 	mov bl, [pallete.0]
 	call drawCell       ; redraw background
 	jmp .skip
 
-.reverse:
+.redraw:
 	mov byte [playerpos.x], cl
 	mov byte [playerpos.y], dl
 
