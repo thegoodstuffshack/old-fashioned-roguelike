@@ -53,7 +53,7 @@ player:
 	mov ax, turtle
 	mov cl, 2
 	mov dl, 2
-	call loadImageToCell
+	call drawImageToCell
 	popa
 	jmp .moved
 
@@ -82,10 +82,10 @@ player:
 
 
 drawPlayer:
-	mov bl, [pallete.3]
+	mov ax, turtle
 	mov cl, [playerpos.x]
 	mov dl, [playerpos.y]
-	call drawCell
+	call drawImageToCell
 	ret
 
 
@@ -96,3 +96,6 @@ playerDead:
 	mov bl, byte [pallete.1]
 	call drawCell
 	jmp $
+
+
+%include "bin/turtle.bin"

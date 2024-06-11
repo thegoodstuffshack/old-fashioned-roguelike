@@ -92,21 +92,10 @@ drawMap:
 .y: db 0
 
 
-turtle: db \
-0, 2, 2, 2, 2, 2, 2, 0,\
-2, 2, 2, 6, 2, 2, 2, 2,\
-2, 2, 4, 6, 6, 4, 2, 2,\
-2, 2, 6, 6, 4, 4, 2, 2,\
-2, 6, 4, 6, 6, 6, 1, 1,\
-2, 6, 4, 6, 4, 1, 1, 1,\
-2, 2, 5, 5, 2, 5, 2, 2,\
-0, 2, 5, 2, 2, 5, 2, 0
-
-
 ; input ax: pointer to image
 ; input cl: cell x
 ; input dl: cell y
-loadImageToCell:
+drawImageToCell:
 	mov di, ax
 	
 	push dx
@@ -126,8 +115,12 @@ loadImageToCell:
 
 	; find colour -> bl
 	mov bl, byte [di]
+	cmp bl, 15
+	je .transparent
 
 	mov byte [es:si], bl
+
+.transparent:
 	inc ah
 	inc si
 	inc di
