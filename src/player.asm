@@ -98,4 +98,4 @@ playerDead:
 	jmp $
 
 
-%include "bin/turtle.bin"
+%include "src/art/turtle.asm"
