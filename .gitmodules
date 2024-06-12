@@ -1,0 +1,3 @@
+[submodule "scripts/Image-to-Array"]
+	path = scripts/Image-to-Array
+	url = https://github.com/thegoodstuffshack/Image-to-Array
