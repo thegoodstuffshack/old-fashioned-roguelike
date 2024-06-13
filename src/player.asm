@@ -50,7 +50,7 @@ player:
 	je .skip
 	inc byte [playerpos.y]
 	pusha
-	mov ax, turdle2.png
+	mov ax, turdle2
 	mov cl, 2
 	mov dl, 2
 	call drawImageToCell
@@ -82,7 +82,7 @@ player:
 
 
 drawPlayer:
-	mov ax, turdle2.png
+	mov ax, turdle2
 	mov cl, [playerpos.x]
 	mov dl, [playerpos.y]
 	call drawImageToCell
@@ -98,4 +98,4 @@ playerDead:
 	jmp $
 
 
-%include "src/art/turdle2.png.asm"
+%include "src/art/include.asm"
