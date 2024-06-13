@@ -4,18 +4,6 @@
 
 ; move enemies on map
 enemyHandler:
-; 	mov si, word [enemy_rng_pointer]
-; 	cmp si, enemy_rng_count
-; 	jne .continue
-; 	mov word [enemy_rng_pointer], 0xFFFF
-; 	xor si, si
-; .continue:
-; 	inc word [enemy_rng_pointer]
-; 	add si, enemy_rng
-; 	mov al, byte [si]
-	
-; 	push ax ; random number [bp+8]
-
 	xor bx, bx
 .enemy_logic_loop:
 	cmp bx, enemy_count
@@ -36,7 +24,6 @@ enemyHandler:
 	; cl: x coord
 	; dl: y coord
 	; bp+6: enemy memory offset
-	;;; bp+8: random number
 	; returns new (x,y) coord (cl,dl)
 	call [di]
 	
@@ -49,7 +36,6 @@ enemyHandler:
 	jmp .enemy_logic_loop
 
 .end:
-	; pop ax
 	call check_player
 	cmp byte [playerStatus], 0
 	je playerDead
