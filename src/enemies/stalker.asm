@@ -39,9 +39,24 @@ stalker:
 .neg_y:
 	add cl, ch
 	add dl, dh
+
+; do enemy collision check on obstacles and other enemies
+	mov ax, map
+	call checkWallCollision
+	jnz .collided
+	call checkEoECollision
+	jnz .collided
+
+.collision_end:
 	mov bl, byte [pallete.4]
 	call drawCell
 
 .end:
 	pop bp
 	ret
+
+; for now, just don't move
+.collided:
+	sub cl, ch
+	sub dl, dh
+	jmp .collision_end

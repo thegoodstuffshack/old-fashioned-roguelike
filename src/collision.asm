@@ -5,8 +5,8 @@
 ; input ax: pointer to map
 ; input cl: cell x
 ; input dl: cell y
-; returns ah: collision bit, sets zero flag if 0
-checkCollision:
+; returns ah: collision byte, sets zero flag if 0
+checkWallCollision:
 	mov di, ax
 
 	mov al, VIDEO_W / CELL_SIZE / 8
@@ -28,9 +28,33 @@ checkCollision:
 	mov cl, 7
 	sub cl, al
 	shr ah, cl
-	and ah, 1 ; ah = collision bit
+	and ah, 1 ; ah = collision byte
 	pop cx
 
 .end:
 	ret
 
+
+; input cl: cell x
+; input dl: cell y
+; returns ah: collision byte
+; enemy on enemy collision check
+checkEoECollision:
+	xor ah, ah
+	mov di, enemy_positions
+	push cx
+	mov ch, dl
+.loop:
+	cmp cx, word [di]
+	je .collided
+	add di, 2
+	cmp di, enemy_positions + 2*enemy_count
+	jne .loop
+	jmp .end
+
+.collided:
+	xor ah, 1 ; sets zf to no
+
+.end:
+	pop cx
+	ret

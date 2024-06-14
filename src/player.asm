@@ -63,16 +63,16 @@ player:
 	mov ax, map
 	mov cl, byte [playerpos.x]
 	mov dl, byte [playerpos.y]
-	call checkCollision ; input playerpos.x, playerpos.y, revert to cx, dx
+	call checkWallCollision ; input playerpos.x, playerpos.y, revert to cx, dx
 	pop dx
 	pop cx
-	jnz .redraw
+	jnz .collided
 
 	mov bl, [pallete.0]
 	call drawCell       ; redraw background
 	jmp .skip
 
-.redraw:
+.collided:
 	mov byte [playerpos.x], cl
 	mov byte [playerpos.y], dl
 
@@ -96,6 +96,3 @@ playerDead:
 	mov bl, byte [pallete.1]
 	call drawCell
 	jmp $
-
-
-%include "src/art/include.asm"

@@ -80,7 +80,7 @@ dw 0xAA55
 
 times 2*512-($-$$) db 0
 map: incbin "bin/map.bin"
-
+%include "src/art/include.asm"
 
 sector_amount equ 3
 times sector_amount*512-($-$$) db 0
