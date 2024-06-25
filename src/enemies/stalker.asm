@@ -48,8 +48,10 @@ stalker:
 	jnz .collided
 
 .collision_end:
-	mov bl, byte [pallete.4]
-	call drawCell
+	; mov bl, byte [pallete.4]
+	; call drawCell
+	mov ax, crab
+	call drawImageToCell
 
 .end:
 	pop bp
