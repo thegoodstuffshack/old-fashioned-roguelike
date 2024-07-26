@@ -76,3 +76,4 @@ enemy_list: db               0,            0,            0,           1
 enemy_positions: dw coord(1,1), coord(10,10), coord(15, 2), coord(1, 0)
 
 %include "src/enemies/stalker.asm"
+%include "src/enemies/wall_monster.asm"
